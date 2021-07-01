@@ -31,7 +31,8 @@ class MovieCell: UITableViewCell {
     @IBOutlet weak var coverImage: UIRoundedImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
-    @IBOutlet weak var ratingButton: UIButton!
+    @IBOutlet weak var rating: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

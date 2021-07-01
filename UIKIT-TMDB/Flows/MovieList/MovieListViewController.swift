@@ -62,7 +62,7 @@ extension MovieListViewController: UITableViewDataSource {
 
         cell.titleLabel.text = movie.title
         cell.overviewLabel.text = movie.overview
-        cell.ratingButton.titleLabel?.text = String(movie.rating)
+        cell.rating.text = String(movie.rating)
 
         
         return cell
