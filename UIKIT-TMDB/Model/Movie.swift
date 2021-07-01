@@ -6,10 +6,17 @@
 //
 
 import Foundation
+import UIKit
 
-struct Movie {
+struct Movie: CustomStringConvertible {
     let id: Int
     let title: String
     let overview: String
     let rating: Double
+    
+    var imageCover: UIImage?
+
+    var description: String {
+        return "The movie \(title) with ID of \(id) has \(rating) of rating. Description: \(overview) \n"
+    }
 }

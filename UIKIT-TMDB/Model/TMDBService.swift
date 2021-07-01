@@ -9,18 +9,50 @@ import Foundation
 
 struct TMDBService {
     //MARK: - Class and variables setup
-    let urlString: String = "https://api.themoviedb.org/3/movie/popular?api_key=29e140b5aab9879b19e9118a0af356c9&language=en-US&page=1"
+    var movies: [Movie]?
+    var imageURL: String?
     
     //MARK: - URLSession - Popular Movies
     func requestPopularMovies(pages: Int = 1, using completionHandler: @escaping ([Movie]) -> Void) {
         if pages < 0 { fatalError("The number of pages is invalid. Pages count: \(pages)") }
         
+        typealias MovieJSON = [String: Any]
+
+        let urlString: String = "https://api.themoviedb.org/3/movie/popular?api_key=29e140b5aab9879b19e9118a0af356c9&language=en-US&page=\(pages)"
         guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
-            print(response)
+            guard let unwrappedData = data,
+                  let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: .fragmentsAllowed) as? [String: Any],
+                  let movies = json["results"] as? [MovieJSON]
+            else {
+                completionHandler([])
+                return }
+            
+            var localMovies: [Movie] = []
+            
+            for movieJSONObject in movies {
+                guard let id = movieJSONObject["id"] as? Int,
+                      let title = movieJSONObject["original_title"] as? String,
+                      let overview = movieJSONObject["overview"] as? String,
+                      let rating = movieJSONObject["vote_average"] as? Double,
+                      let posterPath = movieJSONObject["poster_path"] as? String
+                else { continue }
+                
+                let movie = Movie(id: id, title: title, overview: overview, rating: rating)
+                localMovies.append(movie)
+            }
+            
+            completionHandler(localMovies)
+            
         }
         .resume()
+    }
+    
+    
+    //MARK: - URLSession - Poster Image
+    func fetchMoviePoster(posterPath: String) {
+        var baseImageUrl = "https://image.tmdb.org/t/p/original" + posterPath
     }
     
     //MARK: - URLSession - Now Playing Movies

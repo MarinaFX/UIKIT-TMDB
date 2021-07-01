@@ -7,10 +7,28 @@
 
 import UIKit
 
-/*@IBDesignable*/ class MovieCell: UITableViewCell {
+@IBDesignable class UIRoundedImageView: UIImageView {
+    //MARK: - UI Setup
+    override func prepareForInterfaceBuilder() {
+        commonInit()
+    }
+
+    func commonInit() {
+        layer.cornerRadius = cornerRadius
+    }
+    
+    //MARK: - Inspectable Variables - cornerRadius
+    @IBInspectable var cornerRadius: CGFloat = 0 {
+        didSet {
+            layer.cornerRadius = cornerRadius
+        }
+    }
+}
+
+class MovieCell: UITableViewCell {
     
     //MARK: - Class and Variables Setup
-    @IBOutlet weak var coverImage: UIImageView!
+    @IBOutlet weak var coverImage: UIRoundedImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var ratingButton: UIButton!
@@ -18,21 +36,4 @@ import UIKit
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    
-//    //MARK: - UI Setup
-//    override func prepareForInterfaceBuilder() {
-//        commonInit()
-//    }
-//
-//    func commonInit() {
-//        coverImage.layer.cornerRadius = cornerRadius
-//    }
-    
-    //MARK: - Inspectable Variables - cornerRadius
-//    @IBInspectable var cornerRadius: CGFloat = 0 {
-//        didSet {
-//            coverImage.layer.cornerRadius = cornerRadius //storyboard esta crashando nessa linha. Seria por conta dos outlets? Estou tentando setar o corner radius de um outlet que ainda nao foi instanciado?
-//        }
-//    }
-    
 }
