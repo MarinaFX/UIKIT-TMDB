@@ -36,6 +36,10 @@ class MovieListViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
 }
 
 //MARK: - TableView - Delegate
@@ -48,15 +52,17 @@ extension MovieListViewController:  UITableViewDelegate {
 
 extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return popularMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieCell
         
-//        cell.titleLabel.text = popularMovies[indexPath.row].title
-//        cell.overviewLabel.text = popularMovies[indexPath.row].overview
-//        cell.ratingButton.titleLabel?.text = String(popularMovies[indexPath.row].rating)
+        let movie = popularMovies[indexPath.row]
+
+        cell.titleLabel.text = movie.title
+        cell.overviewLabel.text = movie.overview
+        cell.ratingButton.titleLabel?.text = String(movie.rating)
 
         
         return cell
