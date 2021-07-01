@@ -60,6 +60,7 @@ extension MovieListViewController: UITableViewDataSource {
         
         let movie = popularMovies[indexPath.row]
 
+        cell.coverImage.image = movie.imageCover
         cell.titleLabel.text = movie.title
         cell.overviewLabel.text = movie.overview
         cell.rating.text = String(movie.rating)

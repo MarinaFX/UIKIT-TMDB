@@ -6,13 +6,16 @@
 //
 
 import Foundation
+import UIKit
 
 struct TMDBService {
     //MARK: - Class and variables setup
+    
+    private let BASE_IMAGE_URL: String = "https://image.tmdb.org/t/p/original"
     var movies: [Movie]?
-    var imageURL: String?
     
     //MARK: - URLSession - Popular Movies
+    
     func requestPopularMovies(pages: Int = 1, using completionHandler: @escaping ([Movie]) -> Void) {
         if pages < 0 { fatalError("The number of pages is invalid. Pages count: \(pages)") }
         
@@ -25,9 +28,7 @@ struct TMDBService {
             guard let unwrappedData = data,
                   let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: .fragmentsAllowed) as? [String: Any],
                   let movies = json["results"] as? [MovieJSON]
-            else {
-                completionHandler([])
-                return }
+            else { completionHandler([]); return }
             
             var localMovies: [Movie] = []
             
@@ -39,7 +40,9 @@ struct TMDBService {
                       let posterPath = movieJSONObject["poster_path"] as? String
                 else { continue }
                 
-                let movie = Movie(id: id, title: title, overview: overview, rating: rating)
+                let image = fetchMoviePoster(with: URL(string: BASE_IMAGE_URL + posterPath))
+                
+                let movie = Movie(id: id, title: title, overview: overview, rating: rating, imageCover: image)
                 localMovies.append(movie)
             }
             
@@ -51,8 +54,12 @@ struct TMDBService {
     
     
     //MARK: - URLSession - Poster Image
-    func fetchMoviePoster(posterPath: String) {
-        var baseImageUrl = "https://image.tmdb.org/t/p/original" + posterPath
+    
+    func fetchMoviePoster(with url: URL?) -> UIImage? {
+        guard
+            let url = url,
+            let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
     }
     
     //MARK: - URLSession - Now Playing Movies
