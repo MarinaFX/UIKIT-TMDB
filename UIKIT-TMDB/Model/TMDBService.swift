@@ -12,18 +12,22 @@ struct TMDBService {
     //MARK: - Class and variables setup
     
     private let BASE_IMAGE_URL: String = "https://image.tmdb.org/t/p/original"
+    
+    func getUrl(param: String, pages: Int) -> String {
+        return "https://api.themoviedb.org/3/movie/\(param)?api_key=29e140b5aab9879b19e9118a0af356c9&language=en-US&page=\(pages)"
+    }
+    
     var movies: [Movie]?
     
     //MARK: - URLSession - Popular Movies
     
-    func requestPopularMovies(pages: Int = 1, using completionHandler: @escaping ([Movie]) -> Void) {
+    func requestMovies(type: String, pages: Int = 1, using completionHandler: @escaping ([Movie]) -> Void) {
         if pages < 0 { fatalError("The number of pages is invalid. Pages count: \(pages)") }
         
         typealias MovieJSON = [String: Any]
-
-        let urlString: String = "https://api.themoviedb.org/3/movie/popular?api_key=29e140b5aab9879b19e9118a0af356c9&language=en-US&page=\(pages)"
-        guard let url = URL(string: urlString) else { return }
         
+        guard let url = URL(string: getUrl(param: type, pages: pages)) else { return }
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let unwrappedData = data,
                   let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: .fragmentsAllowed) as? [String: Any],
@@ -43,6 +47,7 @@ struct TMDBService {
                 let image = fetchMoviePoster(with: URL(string: BASE_IMAGE_URL + posterPath))
                 
                 let movie = Movie(id: id, title: title, overview: overview, rating: rating, imageCover: image)
+                
                 localMovies.append(movie)
             }
             
