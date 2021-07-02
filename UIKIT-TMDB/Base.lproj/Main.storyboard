@@ -96,7 +96,6 @@
                                             <outlet property="overviewLabel" destination="mFJ-oM-nes" id="KYz-4S-pe0"/>
                                             <outlet property="rating" destination="elB-57-TDc" id="9Y3-Mc-v0E"/>
                                             <outlet property="titleLabel" destination="26a-tQ-Uru" id="wAj-5L-she"/>
-                                            <segue destination="Xte-Io-VGj" kind="show" identifier="toMovieDetails" id="UDc-58-Sev"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -114,6 +113,7 @@
                     <navigationItem key="navigationItem" title="Movies" id="zhq-Fz-kqV"/>
                     <connections>
                         <outlet property="tableView" destination="366-Gb-0AJ" id="Cn6-CA-pyQ"/>
+                        <segue destination="Xte-Io-VGj" kind="show" identifier="toMovieDetails" id="FlK-FA-tyf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

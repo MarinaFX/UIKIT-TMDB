@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 struct TMDBService {
-    //MARK: - Class and variables setup
+    //MARK: - Variables setup
     
-    private let BASE_IMAGE_URL: String = "https://image.tmdb.org/t/p/original"
+    private let BASE_IMAGE_URL: String = "https://image.tmdb.org/t/p/w154"
     
     func getUrl(param: String, pages: Int) -> String {
         return "https://api.themoviedb.org/3/movie/\(param)?api_key=29e140b5aab9879b19e9118a0af356c9&language=en-US&page=\(pages)"
@@ -23,18 +23,23 @@ struct TMDBService {
     
     func requestMovies(type: String, pages: Int = 1, using completionHandler: @escaping ([Movie]) -> Void) {
         if pages < 0 { fatalError("The number of pages is invalid. Pages count: \(pages)") }
+        guard let url = URL(string: getUrl(param: type, pages: pages)) else { return }
         
         typealias MovieJSON = [String: Any]
+        typealias TemporaryMovie = (id: Int, title: String, overview: String, rating: Double, posterPath: String)
         
-        guard let url = URL(string: getUrl(param: type, pages: pages)) else { return }
+        let dispatchSemaphore = DispatchSemaphore(value: 0)
+        
+        var localMovies: [Movie] = []
+        var localTempMovies: [TemporaryMovie] = []
+        
+        //MARK: Movies request
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let unwrappedData = data,
                   let json = try? JSONSerialization.jsonObject(with: unwrappedData, options: .fragmentsAllowed) as? [String: Any],
                   let movies = json["results"] as? [MovieJSON]
-            else { completionHandler([]); return }
-            
-            var localMovies: [Movie] = []
+            else { dispatchSemaphore.signal(); return }
             
             for movieJSONObject in movies {
                 guard let id = movieJSONObject["id"] as? Int,
@@ -44,27 +49,54 @@ struct TMDBService {
                       let posterPath = movieJSONObject["poster_path"] as? String
                 else { continue }
                 
-                let image = fetchMoviePoster(with: URL(string: BASE_IMAGE_URL + posterPath))
+                let tempMovie = TemporaryMovie(id: id, title: title, overview: overview, rating: rating, posterPath: posterPath)
+                localTempMovies.append(tempMovie)
                 
-                let movie = Movie(id: id, title: title, overview: overview, rating: rating, imageCover: image)
-                
-                localMovies.append(movie)
+                //print("🟡🟡🎥🟡🟡")
             }
             
-            completionHandler(localMovies)
-            
+            dispatchSemaphore.signal()
+            //print("🟢🟢🎥🟢🟢")
         }
         .resume()
+        
+        //print("🔴🔴📸🔴🔴")
+        dispatchSemaphore.wait()
+        //print("🟢🟢📸🟢🟢")
+        
+        //MARK: Movie poster request
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for tempMovie in localTempMovies {
+            guard let url = URL(string: BASE_IMAGE_URL + tempMovie.posterPath) else { continue }
+            dispatchGroup.enter()
+            //print("🟡🟡📸🟡🟡")
+            
+            fetchMoviePoster(with: url) { image in
+                let movie = Movie(id: tempMovie.id, title: tempMovie.title, overview: tempMovie.overview, rating: tempMovie.rating, imageCover: image)
+                localMovies.append(movie)
+                dispatchGroup.leave()
+                //print("🟢🟢📸🟢🟢")
+            }
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.global(qos: .background)) {
+            completionHandler(localMovies)
+            //print("🟢🟢💯🟢🟢")
+        }
+        
     }
     
     
     //MARK: - URLSession - Poster Image
     
-    func fetchMoviePoster(with url: URL?) -> UIImage? {
-        guard
-            let url = url,
-            let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
+    func fetchMoviePoster(with url: URL, completionHandler: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            guard let data = try? Data(contentsOf: url) else { completionHandler(nil); return }
+            let image = UIImage(data: data)
+            completionHandler(image)
+        }
     }
     
     //MARK: - URLSession - Now Playing Movies
