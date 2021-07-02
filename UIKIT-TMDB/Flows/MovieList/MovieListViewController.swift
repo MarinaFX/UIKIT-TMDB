@@ -11,7 +11,7 @@ import UIKit
 
 class MovieListViewController: UIViewController {
     
-    //MARK: - Class and variables setup
+    //MARK: - Variables setup
     @IBOutlet weak var tableView: UITableView!
     
     private let cellID: String = "movieCell"
@@ -19,6 +19,8 @@ class MovieListViewController: UIViewController {
     
     var popularMovies: [Movie] = []
     var nowPlayingMovies: [Movie] = []
+    
+    //MARK: Class setup
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,8 +45,19 @@ class MovieListViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+    //MARK: Segues - To Movie Details
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toMovieDetails", let indexPath = sender as? IndexPath {
+            let destination = segue.destination as! MovieDetailViewController
+            
+            if indexPath.section == 0 {
+                destination.movie = popularMovies[indexPath.row]
+            }
+            else {
+                destination.movie = nowPlayingMovies[indexPath.row]
+            }
+        }
     }
     
 }
@@ -52,6 +65,14 @@ class MovieListViewController: UIViewController {
 //MARK: - TableView - Delegate
 
 extension MovieListViewController:  UITableViewDelegate {
+    //MARK: Row Selection
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "toMovieDetails", sender: indexPath)
+    }
+    
+    //MARK: Header Setup
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var title: String = ""
         
@@ -63,13 +84,10 @@ extension MovieListViewController:  UITableViewDelegate {
         }
         
         let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 60))
-        
         header.backgroundColor = .clear
         
         let label = UILabel(frame: CGRect(x: 20, y: 16, width: view.frame.size.width, height: 22))
-        
         label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        
         label.text = title
         
         header.addSubview(label)
@@ -81,12 +99,13 @@ extension MovieListViewController:  UITableViewDelegate {
 //MARK: - TableView - DataSource
 
 extension MovieListViewController: UITableViewDataSource {
+    
+    //MARK: Row in section setup
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if popularMovies.count > 0 && section == 0 {
             return 2
         }
-        
         if section == 1 {
             return nowPlayingMovies.count
         }
@@ -94,9 +113,13 @@ extension MovieListViewController: UITableViewDataSource {
         return 0
     }
     
+    //MARK: Row setup
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
+    
+    //MARK: Cell setup
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieCell
