@@ -20,7 +20,6 @@ class MovieListViewController: UIViewController {
     var popularMovies: [Movie] = []
     var nowPlayingMovies: [Movie] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,8 +35,15 @@ class MovieListViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+    //MARK: - Segues - To Movie Details
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toMovieDetails", let indexPath = sender as? IndexPath {
+            
+            let destination = segue.destination as! MovieDetailViewController
+            
+            destination.movie = popularMovies[indexPath.row]
+        }
     }
     
 }
@@ -45,7 +51,9 @@ class MovieListViewController: UIViewController {
 //MARK: - TableView - Delegate
 
 extension MovieListViewController:  UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "toMovieDetails", sender: indexPath)
+    }
 }
 
 //MARK: - TableView - DataSource

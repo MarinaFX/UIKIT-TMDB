@@ -96,7 +96,7 @@
                                             <outlet property="overviewLabel" destination="mFJ-oM-nes" id="KYz-4S-pe0"/>
                                             <outlet property="rating" destination="elB-57-TDc" id="9Y3-Mc-v0E"/>
                                             <outlet property="titleLabel" destination="26a-tQ-Uru" id="wAj-5L-she"/>
-                                            <segue destination="Xte-Io-VGj" kind="show" id="UDc-58-Sev"/>
+                                            <segue destination="Xte-Io-VGj" kind="show" identifier="toMovieDetails" id="UDc-58-Sev"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -123,7 +123,7 @@
         <!--Details-->
         <scene sceneID="JMg-Uc-fiP">
             <objects>
-                <viewController id="Xte-Io-VGj" sceneMemberID="viewController">
+                <viewController id="Xte-Io-VGj" customClass="MovieDetailViewController" customModule="UIKIT_TMDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="K3v-nY-A6V">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -133,7 +133,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="224" id="Q7l-f4-n1f">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="moviePresentationCell" rowHeight="224" id="Q7l-f4-n1f" customClass="MoviePresentationCell" customModule="UIKIT_TMDB" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="24.5" width="414" height="224"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Q7l-f4-n1f" id="SAR-6u-NyJ">
@@ -198,37 +198,48 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="eHt-y6-019" secondAttribute="bottom" constant="30" id="vWR-IF-KRt"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imageCover" destination="5TY-o6-SKq" id="JJi-v7-Wdp"/>
+                                            <outlet property="infoLabel" destination="fBQ-Eq-H7F" id="Bjz-S3-Kjn"/>
+                                            <outlet property="ratingLabel" destination="5EO-tT-4J7" id="dun-tT-udc"/>
+                                            <outlet property="titleLabel" destination="DRX-bc-qId" id="Gn0-Mk-krA"/>
+                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="500" id="Ned-Ho-Fpg">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="movieOverviewCell" rowHeight="500" id="Ned-Ho-Fpg" customClass="MovieOverviewCell" customModule="UIKIT_TMDB" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="248.5" width="414" height="500"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ned-Ho-Fpg" id="nXP-B0-rA5">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHN-AR-ww3">
-                                                    <rect key="frame" x="20" y="11" width="374" height="17"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="1000" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qPr-vi-ZQf">
-                                                    <rect key="frame" x="20" y="41" width="374" height="101.5"/>
-                                                    <string key="text">Simba idolises his father, King Mufasa, and takes to heart his own royal destiny. But not everyone in the kingdom celebrates the new cub's arrival. Scar, Mufasa's brother—and former heir to the throne—has plans of his own. </string>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie overview" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qPr-vi-ZQf">
+                                                    <rect key="frame" x="16" y="44" width="382" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHN-AR-ww3">
+                                                    <rect key="frame" x="16" y="11" width="382" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="leading" secondItem="nXP-B0-rA5" secondAttribute="leadingMargin" id="6vp-04-kQp"/>
-                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="trailing" secondItem="nXP-B0-rA5" secondAttribute="trailingMargin" id="Fqo-YV-v2A"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="KHN-AR-ww3" secondAttribute="trailing" id="Nwe-dn-vfK"/>
-                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="top" secondItem="KHN-AR-ww3" secondAttribute="bottom" constant="13" id="PtL-ih-4W9"/>
-                                                <constraint firstItem="KHN-AR-ww3" firstAttribute="top" secondItem="nXP-B0-rA5" secondAttribute="topMargin" id="XQA-yH-p1a"/>
-                                                <constraint firstItem="KHN-AR-ww3" firstAttribute="leading" secondItem="nXP-B0-rA5" secondAttribute="leadingMargin" id="isD-01-gWd"/>
+                                                <constraint firstAttribute="trailing" secondItem="qPr-vi-ZQf" secondAttribute="trailing" constant="16" id="DUb-fY-CKH"/>
+                                                <constraint firstAttribute="trailing" secondItem="KHN-AR-ww3" secondAttribute="trailing" constant="16" id="JQS-Bd-M4M"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="qPr-vi-ZQf" secondAttribute="bottom" constant="16" id="WrW-cy-veF"/>
+                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="centerX" secondItem="nXP-B0-rA5" secondAttribute="centerX" id="XlN-bB-GsX"/>
+                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="leading" secondItem="nXP-B0-rA5" secondAttribute="leading" constant="16" id="kmZ-1T-jc1"/>
+                                                <constraint firstItem="qPr-vi-ZQf" firstAttribute="top" secondItem="KHN-AR-ww3" secondAttribute="bottom" constant="16" id="lf6-ci-39s"/>
+                                                <constraint firstItem="KHN-AR-ww3" firstAttribute="top" secondItem="nXP-B0-rA5" secondAttribute="top" constant="11" id="m3e-Tj-RHW"/>
+                                                <constraint firstItem="KHN-AR-ww3" firstAttribute="leading" secondItem="nXP-B0-rA5" secondAttribute="leading" constant="16" id="oec-7M-xUK"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="descriptionLabel" destination="qPr-vi-ZQf" id="rQR-zm-zN4"/>
+                                            <outlet property="titleLabel" destination="KHN-AR-ww3" id="J0L-fX-Zd2"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -238,6 +249,9 @@
                         <color key="tintColor" systemColor="secondaryLabelColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Details" largeTitleDisplayMode="never" id="Kxe-Yv-sbD"/>
+                    <connections>
+                        <outlet property="tableView" destination="FMG-VJ-qxX" id="4oF-Tm-uou"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dcM-HE-3YT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
