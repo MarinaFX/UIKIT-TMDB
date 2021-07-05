@@ -17,8 +17,12 @@ class MovieListViewController: UIViewController {
     private let cellID: String = "movieCell"
     private let service = TMDBService()
     
+    var filteredPopularMovies: [Movie] = []
+    var filteredNowPlayingMovies: [Movie] = []
+    
     var popularMovies: [Movie] = []
     var nowPlayingMovies: [Movie] = []
+    var searchController = UISearchController(searchResultsController: nil)
     
     //MARK: Class setup
     
@@ -28,8 +32,15 @@ class MovieListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        
+        
         service.requestMovies(type: "popular") { (popularMovies) in
             self.popularMovies = popularMovies
+            
+            self.filteredPopularMovies = popularMovies
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -38,6 +49,8 @@ class MovieListViewController: UIViewController {
         
         service.requestMovies(type: "now_playing") { (nowPlayingMovies) in
             self.nowPlayingMovies = nowPlayingMovies
+            
+            self.filteredNowPlayingMovies = nowPlayingMovies
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -103,17 +116,17 @@ extension MovieListViewController: UITableViewDataSource {
     //MARK: Row in section setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if popularMovies.count > 0 && section == 0 {
-            return 2
+        if filteredPopularMovies.count > 0 && section == 0 {
+            return filteredPopularMovies.count > 2 ? 2 : filteredPopularMovies.count
         }
         if section == 1 {
-            return nowPlayingMovies.count
+            return filteredNowPlayingMovies.count
         }
         
         return 0
     }
     
-    //MARK: Row setup
+    //MARK: Section count setup
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -124,7 +137,7 @@ extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieCell
         
-        let movie = indexPath.section == 0 ? popularMovies[indexPath.row] : nowPlayingMovies[indexPath.row]
+        let movie = indexPath.section == 0 ? filteredPopularMovies[indexPath.row] : filteredNowPlayingMovies[indexPath.row]
 
         cell.coverImage.image = movie.imageCover
         cell.titleLabel.text = movie.title
@@ -132,5 +145,36 @@ extension MovieListViewController: UITableViewDataSource {
         cell.rating.text = String(movie.rating)
 
         return cell
+    }
+}
+
+//MARK: - SearchControllerDelegate
+
+extension MovieListViewController: UISearchResultsUpdating {
+    //MARK: Update view while searching
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text ?? ""
+        
+        if searchText.isEmpty {
+            filteredPopularMovies = popularMovies
+            filteredNowPlayingMovies = nowPlayingMovies
+        }
+        else {
+            filteredNowPlayingMovies = []
+            filteredPopularMovies = []
+            for movie in (popularMovies + nowPlayingMovies) {
+                if movie.title.lowercased().contains(searchText.lowercased()) {
+                    if popularMovies.contains(movie) && !filteredPopularMovies.contains(movie) {
+                        filteredPopularMovies.append(movie)
+                    }
+                    if nowPlayingMovies.contains(movie) && !filteredNowPlayingMovies.contains(movie) {
+                        filteredNowPlayingMovies.append(movie)
+                    }
+                }
+            }
+        }
+        
+        tableView.reloadData()
     }
 }

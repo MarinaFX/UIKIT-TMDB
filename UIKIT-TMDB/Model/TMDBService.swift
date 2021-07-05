@@ -67,6 +67,7 @@ struct TMDBService {
         //MARK: Movie poster request
         
         let dispatchGroup = DispatchGroup()
+        let imageSemaphore = DispatchSemaphore(value: 1)
         
         for tempMovie in localTempMovies {
             guard let url = URL(string: BASE_IMAGE_URL + tempMovie.posterPath) else { continue }
@@ -75,7 +76,9 @@ struct TMDBService {
             
             fetchMoviePoster(with: url) { image in
                 let movie = Movie(id: tempMovie.id, title: tempMovie.title, overview: tempMovie.overview, rating: tempMovie.rating, imageCover: image)
+                imageSemaphore.wait()
                 localMovies.append(movie)
+                imageSemaphore.signal()
                 dispatchGroup.leave()
                 //print("🟢🟢📸🟢🟢")
             }
