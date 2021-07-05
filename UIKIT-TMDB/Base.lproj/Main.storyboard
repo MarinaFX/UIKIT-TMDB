@@ -105,8 +105,8 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="366-Gb-0AJ" secondAttribute="bottom" id="5PC-7w-yG1"/>
-                            <constraint firstItem="366-Gb-0AJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="YsL-mA-Jk6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="366-Gb-0AJ" secondAttribute="trailing" id="cYA-fI-sDk"/>
+                            <constraint firstItem="366-Gb-0AJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="ekx-CY-U0c"/>
                             <constraint firstItem="366-Gb-0AJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="n8f-V1-WfO"/>
                         </constraints>
                     </view>
@@ -118,7 +118,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="972" y="131"/>
+            <point key="canvasLocation" x="971.01449275362324" y="130.58035714285714"/>
         </scene>
         <!--Details-->
         <scene sceneID="JMg-Uc-fiP">

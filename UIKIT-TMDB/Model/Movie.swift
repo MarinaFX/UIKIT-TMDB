@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct Movie: CustomStringConvertible {
+struct Movie: CustomStringConvertible, Equatable {
     let id: Int
     let title: String
     let overview: String
@@ -18,5 +18,9 @@ struct Movie: CustomStringConvertible {
 
     var description: String {
         return "The movie \(title) with ID of \(id) has \(rating) of rating. Description: \(overview) \n"
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.overview == rhs.overview
     }
 }
