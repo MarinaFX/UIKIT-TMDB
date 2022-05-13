@@ -130,7 +130,7 @@ class TMDBService {
         else {
             self.nowPlayingMoviesPublisher.send(localMovies)
         }
-        
+
     }
     
     /**
