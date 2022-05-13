@@ -20,6 +20,34 @@
                ReferencedContainer = "container:UIKIT-TMDB.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1B5E54B4282C2227002CA770"
+               BuildableName = "UIKIT-TMDBTests.xctest"
+               BlueprintName = "UIKIT-TMDBTests"
+               ReferencedContainer = "container:UIKIT-TMDB.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1B5E54C1282D97F2002CA770"
+               BuildableName = "UIKIT-TMDBUITests.xctest"
+               BlueprintName = "UIKIT-TMDBUITests"
+               ReferencedContainer = "container:UIKIT-TMDB.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
