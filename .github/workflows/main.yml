@@ -18,16 +18,16 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode.app
       - name: iOS build setup
         run: >-
-          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.4'
+          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11, iOS=15.4'
       - name: testing ... iPhone 11
         run: >-
-          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.4'
+          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11, iOS=15.4'
       - name: testing ... iPhone 11 Pro Max
         run: >-
-          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11 Pro Max,OS=15.4'
+          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPhone 11 Pro Max, iOS=15.4'
       - name: testing ... iPad Air
         run: >-
-          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPad Air (4th generation),OS=15.4'
+          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPad Air (4th generation), iOS=15.4'
       - name: testing ... iPad Pro 12.9
         run: >-
-          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=15.4'
+          xcodebuild test -workspace UIKIT-TMDB.xcodeproj/project.xcworkspace -scheme UIKIT-TMDBTests -destination 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation), iOS=15.4'
