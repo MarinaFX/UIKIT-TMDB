@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 //MARK: - ViewController
 
@@ -14,21 +15,29 @@ class MovieListViewController: UIViewController {
     //MARK: - Variables setup
     @IBOutlet weak var tableView: UITableView!
     
+    private var searchController = UISearchController(searchResultsController: nil)
+
+    private let service: TMDBService = .init()
     private let cellID: String = "movieCell"
-    private let service = TMDBService()
     
-    var filteredPopularMovies: [Movie] = []
-    var filteredNowPlayingMovies: [Movie] = []
+    private var popularMovies: [Movie] {
+        service.popularMoviesPublisher.value
+    }
     
-    var popularMovies: [Movie] = []
-    var nowPlayingMovies: [Movie] = []
-    var searchController = UISearchController(searchResultsController: nil)
+    private var nowPlayingMovies: [Movie] {
+        service.nowPlayingMoviesPublisher.value
+    }
+    
+    private var filteredPopularMovies: [Movie] = []
+    private var filteredNowPlayingMovies: [Movie] = []
+        
+    private var subscriptions: Set<AnyCancellable> = []
     
     //MARK: Class setup
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -36,25 +45,56 @@ class MovieListViewController: UIViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         
+        //MARK: Using Combine
+        fetchMovies(with: "Combine")
         
-        service.requestMovies(type: "popular") { (popularMovies) in
-            self.popularMovies = popularMovies
+        //MARK: Using completions
+        fetchMovies(with: "Completion")
+    }
+    
+    func fetchMovies(with type: String) {
+        if type == "Completion" {
+            service.requestMovies(type: "popular") { (popularMovies) in
+//                self.popularMovies = popularMovies
+//
+//                self.filteredPopularMovies = popularMovies
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
+            }
             
-            self.filteredPopularMovies = popularMovies
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+            service.requestMovies(type: "now_playing") { (nowPlayingMovies) in
+//                self.nowPlayingMovies = nowPlayingMovies
+//
+//                self.filteredNowPlayingMovies = nowPlayingMovies
+//
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
             }
         }
-        
-        service.requestMovies(type: "now_playing") { (nowPlayingMovies) in
-            self.nowPlayingMovies = nowPlayingMovies
+        else {
+            //creating publisher
+            service.popularMoviesPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { movies in
+                    self.tableView.reloadData()
+                }
+                .store(in: &subscriptions)
+            //creating subscription
+            service.requestMovies(for: .popular, at: 1)
             
-            self.filteredNowPlayingMovies = nowPlayingMovies
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            //creating publisher
+            service.nowPlayingMoviesPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { movies in
+                    self.tableView.reloadData()
+                }
+                .store(in: &subscriptions)
+            //creating subscription
+            self.service.requestMovies(for: .nowPlaying, at: 1)
+
         }
     }
     
@@ -64,11 +104,25 @@ class MovieListViewController: UIViewController {
         if segue.identifier == "toMovieDetails", let indexPath = sender as? IndexPath {
             let destination = segue.destination as! MovieDetailViewController
             
-            if indexPath.section == 0 {
-                destination.movie = popularMovies[indexPath.row]
+            let text = searchController.searchBar.text ?? ""
+
+            if text.isEmpty {
+                if indexPath.section == 0 {
+                    destination.movie = popularMovies[indexPath.row]
+                }
+                else {
+                    destination.movie = nowPlayingMovies[indexPath.row]
+                }
             }
             else {
-                destination.movie = nowPlayingMovies[indexPath.row]
+                if indexPath.section == 0 {
+                    print(filteredPopularMovies)
+                    destination.movie = filteredPopularMovies[indexPath.row]
+                }
+                else {
+                    print(nowPlayingMovies)
+                    destination.movie = filteredNowPlayingMovies[indexPath.row]
+                }
             }
         }
     }
@@ -116,11 +170,23 @@ extension MovieListViewController: UITableViewDataSource {
     //MARK: Row in section setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if filteredPopularMovies.count > 0 && section == 0 {
-            return filteredPopularMovies.count > 2 ? 2 : filteredPopularMovies.count
+        let text = searchController.searchBar.text ?? ""
+
+        if text.isEmpty {
+            if popularMovies.count > 0 && section == 0 {
+                return popularMovies.count > 2 ? 2 : popularMovies.count
+            }
+            if section == 1 {
+                return nowPlayingMovies.count
+            }
         }
-        if section == 1 {
-            return filteredNowPlayingMovies.count
+        else {
+            if filteredPopularMovies.count > 0 && section == 0 {
+                return filteredPopularMovies.count > 2 ? 2 : filteredPopularMovies.count
+            }
+            if section == 1 {
+                return filteredNowPlayingMovies.count
+            }
         }
         
         return 0
@@ -136,8 +202,16 @@ extension MovieListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieCell
+        var movie: Movie = Movie(id: 0, title: "", overview: "", rating: 0.0)
         
-        let movie = indexPath.section == 0 ? filteredPopularMovies[indexPath.row] : filteredNowPlayingMovies[indexPath.row]
+        let text = searchController.searchBar.text ?? ""
+        
+        if text.isEmpty {
+            movie = indexPath.section == 0 ? popularMovies[indexPath.row] : nowPlayingMovies[indexPath.row]
+        }
+        else {
+            movie = indexPath.section == 0 ? filteredPopularMovies[indexPath.row] : filteredNowPlayingMovies[indexPath.row]
+        }
 
         cell.coverImage.image = movie.imageCover
         cell.titleLabel.text = movie.title
@@ -157,7 +231,6 @@ extension MovieListViewController: UISearchResultsUpdating {
         let searchText = searchController.searchBar.text ?? ""
         
         if searchText.isEmpty {
-            filteredPopularMovies = popularMovies
             filteredNowPlayingMovies = nowPlayingMovies
         }
         else {

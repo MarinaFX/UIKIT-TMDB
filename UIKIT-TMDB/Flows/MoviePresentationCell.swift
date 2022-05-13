@@ -17,6 +17,8 @@ class MoviePresentationCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        self.imageCover.layer.cornerRadius = 15
         // Initialization code
     }
 
