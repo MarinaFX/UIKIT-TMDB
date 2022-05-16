@@ -18,7 +18,7 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode.app
       - name: testing ... iPhone 13
         run: >-
-          xcodebuild test -scheme UIKIT-TMDBTests -project UIKIT-TMDB.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.4'
+          xcodebuild test -scheme UIKIT-TMDBTests -project UIKIT-TMDB.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.4'
 #      - name: Run unit tests
 #        run: >-
 #          xcodebuild test -scheme BudgetOnTheGo -project BudgetOnTheGo.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 12,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
