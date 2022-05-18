@@ -10,8 +10,19 @@ on:
       - master
   
 jobs: 
+  prepare_simulator: 
+    name: Prepare iOS Simulator
+    runs-on: macOS-latest
+    steps: 
+    - name: Create iOS Simulator
+      run: |
+        xcrun simctl list runtimes
+        xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimRuntime.iOS-14-5
+        xcrun simctl list devices
+
   build: 
     name: Build Project
+    needs: prepare_simulator
     runs-on: macOS-latest
     steps:
     - name: Checkout repository
@@ -28,12 +39,6 @@ jobs:
         xcodebuild build \
         -scheme UIKIT-TMDB \
         -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
-    
-    - name: Prepare iOS Simulator
-      run: |
-        xcrun simctl list runtimes
-        xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimRuntime.iOS-14-5
-        xcrun simctl list devices
         
   test: 
     name: Test Project
