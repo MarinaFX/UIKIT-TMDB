@@ -32,7 +32,7 @@ jobs:
     - name: Prepare iOS Simulator
       run: |
         xcrun simctl list runtimes
-        xcrun simctl create com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-14-5
+        xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimRuntime.iOS-14-5
         xcrun simctl list devices
         
   test: 
