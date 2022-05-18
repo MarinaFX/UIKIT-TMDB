@@ -27,3 +27,23 @@ jobs:
         -scheme UIKIT-TMDB \
         -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
         
+  test: 
+    name: Test Project
+    runs-on: macOS-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        
+      - name: Set Xcode version
+        uses: maxim-lobanov/setup-xcode@v1.1
+        with: 
+          xcode-version: 12.1
+      
+      - name: Test
+        run: |
+          set -o pipefail
+          xcodebuild test \
+          -scheme UIKIT-TMDBTests \
+          -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
+    
+        
