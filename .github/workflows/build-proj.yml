@@ -29,6 +29,7 @@ jobs:
         
   test: 
     name: Test Project
+    needs: build
     runs-on: macOS-latest
     steps: 
       - name: Checkout repository
