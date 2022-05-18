@@ -19,13 +19,21 @@ jobs:
       
     - name: Setup Xcode version
       uses: maxim-lobanov/setup-xcode@v1.4.1
-
+      with: 
+        xcode-version: 12.4
+        
     - name: Build
       run: |
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
         -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
+    
+    - name: Prepare iOS Simulator
+      run: |
+        xcrun simctl list runtimes
+        xcrun simctl create com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-14-5
+        xcrun simctl list devices
         
   test: 
     name: Test Project
@@ -38,7 +46,7 @@ jobs:
       - name: Set Xcode version
         uses: maxim-lobanov/setup-xcode@v1.1
         with: 
-          xcode-version: 13.0
+          xcode-version: 12.4
       
       - name: Test
         run: |
