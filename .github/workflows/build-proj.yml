@@ -18,7 +18,9 @@ jobs:
       run: |
         xcrun simctl list runtimes
         xcrun simctl list devicetypes
+        echo creating device
         xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
+        echo listing devices available
         xcrun simctl list devices
 
   build: 
