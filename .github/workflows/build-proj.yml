@@ -13,14 +13,17 @@ jobs:
   prepare_simulator: 
     name: Prepare iOS Simulator
     runs-on: macOS-latest
+    outputs:
+      device_id: ${{ steps.simulator_device.outputs.iphone_id }}
     steps: 
     - name: Create iOS Simulator
+      id: simulator_device
       run: |
         xcrun simctl list runtimes
         xcrun simctl list devicetypes
         echo creating device
         xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
-        echo listing devices available
+        echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
         xcrun simctl list devices
 
   build: 
@@ -41,7 +44,7 @@ jobs:
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
-        -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
+        -destination 'platform=iOS Simulator,name=${{ needs.prepare_simulator.outputs.device_id }}' \
         
   test: 
     name: Test Project
