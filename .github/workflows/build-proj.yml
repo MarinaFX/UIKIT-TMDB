@@ -50,7 +50,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        path: main
+        path: master
         
     - name: Setup Xcode version
       uses: maxim-lobanov/setup-xcode@v1.4.1
