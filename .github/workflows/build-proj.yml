@@ -34,16 +34,13 @@ jobs:
       
     - name: Setup Xcode version
       uses: maxim-lobanov/setup-xcode@v1.4.1
-      with: 
-        xcode-version: 12.4
-        
-        
+      
     - name: Build
       run: |
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
-        -destination "platform=iOS Simulator,name=iPhone 12 Pro ,OS=15.2" \
+        -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=15.2" \
         
   test: 
     name: Test Project
