@@ -44,7 +44,7 @@ jobs:
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
-        -destination 'platform=iOS Simulator,id=${{ needs.prepare_simulator.outputs.device_id }},OS=15.2' \
+        -destination "platform=iOS Simulator,id=${{ needs.prepare_simulator.outputs.device_id }},OS=15.2" \
         
   test: 
     name: Test Project
