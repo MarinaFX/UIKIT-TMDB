@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Build project
 on:
   push:
@@ -25,7 +23,7 @@ jobs:
         xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
         echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
         xcrun simctl list devices
-
+ 
   build: 
     name: Build Project
     needs: prepare_simulator
@@ -36,15 +34,13 @@ jobs:
       
     - name: Setup Xcode version
       uses: maxim-lobanov/setup-xcode@v1.4.1
-      with: 
-        xcode-version: 12.4
         
     - name: Build
       run: |
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
-        -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
+        -destination "platform=iOS Simulator,id=${{ needs.prepare_simulator.outputs.device_id }},OS=15.2" \
         
   test: 
     name: Test Project
@@ -65,5 +61,3 @@ jobs:
           xcodebuild test \
           -scheme UIKIT-TMDBTests \
           -destination 'platform=iOS Simulator,name=iPhone 12 Pro' \
-    
-        
