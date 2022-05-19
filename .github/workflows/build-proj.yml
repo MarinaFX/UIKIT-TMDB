@@ -40,7 +40,7 @@ jobs:
         set -o pipefail
         xcodebuild build \
         -scheme UIKIT-TMDB \
-        -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=15.2" \
+        -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
         
   test: 
     name: Test Project
@@ -58,4 +58,4 @@ jobs:
           set -o pipefail
           xcodebuild test \
           -scheme UIKIT-TMDBTests \
-          -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=15.2" \
+          -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
