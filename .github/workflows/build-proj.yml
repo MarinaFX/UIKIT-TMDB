@@ -55,7 +55,8 @@ jobs:
       
       - name: Test
         run: |
-          set -o pipefail
-          xcodebuild test \
-          -scheme UIKIT-TMDBTests \
-          -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
+          xcodebuild
+          -scheme UIKIT-TMDBTests 
+          -sdk iphonesimulator 
+          -destination "platform=iOS Simulator,name=iPhone 13,OS=15.2"
+          test \
