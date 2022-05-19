@@ -59,4 +59,5 @@ jobs:
           -scheme UIKIT-TMDBTests 
           -sdk iphonesimulator 
           -destination "platform=iOS Simulator,name=iPhone 13,OS=15.2"
+          -allowProvisioningUpdates
           test \
