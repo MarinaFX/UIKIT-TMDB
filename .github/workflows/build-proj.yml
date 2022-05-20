@@ -53,13 +53,14 @@ jobs:
     - name: Setup Xcode version
       uses: maxim-lobanov/setup-xcode@v1.4.1
       with:
-        xcode_version: 12.4
+        xcode-version: 12.4
        
     - name: Test
       run: |
           xcodebuild test \
+          -project UIKIT-TMDB.xcodeproj \
           -scheme UIKIT-TMDBTests \
-          -destination "platform=iOS Simulator,name=iPhone 12,OS=14.4" \
+          -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4' \
           -allowProvisioningUpdates \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
