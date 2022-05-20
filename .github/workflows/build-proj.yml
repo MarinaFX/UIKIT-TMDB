@@ -57,10 +57,10 @@ jobs:
        
     - name: Test
       run: |
-          xcodebuild \
+          xcodebuild test \
           -scheme UIKIT-TMDBTests \
           -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
           -allowProvisioningUpdates \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
-          test
+          
