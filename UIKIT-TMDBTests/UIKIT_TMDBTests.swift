@@ -60,13 +60,13 @@ class UIKIT_TMDBTests: XCTestCase {
         XCTAssertNotNil(self.movies)
     }
     
-    func testRequestMoviePosterWithCombine() {
-        let moviePosterExpectation = expectation(description: "async movie poster download with combine")
-        
-        let url = URL(string: "https://image.tmdb.org/t/p/w500/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg")!
-        
-        
-    }
+//    func testRequestMoviePosterWithCombine() {
+//        let moviePosterExpectation = expectation(description: "async movie poster download with combine")
+//        
+//        let url = URL(string: "https://image.tmdb.org/t/p/w500/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg")!
+//        
+//        
+//    }
     
     func testRequestMoviePosterWithCompletion() {
         let moviePosterExpectation = expectation(description: "async movie poster download with completion")
