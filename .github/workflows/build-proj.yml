@@ -60,7 +60,7 @@ jobs:
           xcodebuild test \
           -project UIKIT-TMDB.xcodeproj \
           -scheme UIKIT-TMDBTests \
-          -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4' \
+          -destination 'platform=macOS,arch=x86_64,variant=Mac Catalyst' \
           -allowProvisioningUpdates \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
