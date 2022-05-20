@@ -57,7 +57,7 @@ jobs:
       run: |
           xcodebuild test \
           -project UIKIT-TMDB.xcodeproj \
-          -target UIKIT-TMDBTests \
+          -scheme UIKIT-TMDBTests \
           -destination 'platform=macOS,arch=x86_64' \
           -allowProvisioningUpdates \
           CODE_SIGNING_REQUIRED=NO \
