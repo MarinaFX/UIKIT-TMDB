@@ -62,6 +62,5 @@ jobs:
           -scheme UIKIT-TMDBTests \
           -destination 'platform=macOS,arch=x86_64,variant=Mac Catalyst' \
           -allowProvisioningUpdates \
-          CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           
