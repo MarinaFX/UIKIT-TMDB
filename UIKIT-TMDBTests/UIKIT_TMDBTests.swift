@@ -62,10 +62,10 @@ class UIKIT_TMDBTests: XCTestCase {
     
 //    func testRequestMoviePosterWithCombine() {
 //        let moviePosterExpectation = expectation(description: "async movie poster download with combine")
-//        
+//
 //        let url = URL(string: "https://image.tmdb.org/t/p/w500/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg")!
-//        
-//        
+//
+//
 //    }
     
     func testRequestMoviePosterWithCompletion() {
