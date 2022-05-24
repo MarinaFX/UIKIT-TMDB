@@ -56,6 +56,7 @@ jobs:
       - name: Test
         run: |
           xcodebuild \
+          -allowProvisioningUpdates \
           -project UIKIT-TMDB.xcodeproj \
           -scheme UIKIT-TMDBTests \
           -destination platform=macOS,arch=x86_64 \
