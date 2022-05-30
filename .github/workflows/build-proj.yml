@@ -52,6 +52,13 @@ jobs:
 
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1.4.1
+        
+      - name: List devices available
+        run: |
+          echo listing runtimes
+          xcrun simctl list runtimes
+          echo listing devices
+          xcrun simctl list devicetypes
 
       - name: Test
         run: |
