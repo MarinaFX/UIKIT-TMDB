@@ -8,25 +8,25 @@ on:
       - main
 
 jobs:
-  prepare_simulator:
-    name: Prepare iOS Simulator
-    runs-on: macOS-latest
-    outputs:
-      device_id: ${{ steps.simulator_device.outputs.iphone_id }}
-    steps:
-      - name: Create iOS Simulator
-        id: simulator_device
-        run: |
-          xcrun simctl list runtimes
-          xcrun simctl list devicetypes
-          echo creating device
-          xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
-          echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
-          xcrun simctl list devices
+#  prepare_simulator:
+#    name: Prepare iOS Simulator
+#    runs-on: macOS-latest
+#    outputs:
+#      device_id: ${{ steps.simulator_device.outputs.iphone_id }}
+#    steps:
+#      - name: Create iOS Simulator
+#        id: simulator_device
+#        run: |
+#          xcrun simctl list runtimes
+#          xcrun simctl list devicetypes
+#          echo creating device
+#          xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
+#          echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
+#          xcrun simctl list devices
 
   build:
     name: Build Project
-    needs: prepare_simulator
+#    needs: prepare_simulator
     runs-on: macOS-latest
     steps:
       - name: Checkout repository
@@ -44,7 +44,7 @@ jobs:
 
   test:
     name: Test Project
-    needs: [prepare_simulator, build]
+    needs: build
     runs-on: macOS-latest
     steps:
       - name: Checkout
@@ -67,5 +67,5 @@ jobs:
           -project UIKIT-TMDB.xcodeproj \
           -scheme UIKIT-TMDBTests \
           -sdk iphonesimulator \
-          -destination platform=macOS,arch=x86_64 \
+          -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
           test \
