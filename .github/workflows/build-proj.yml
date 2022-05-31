@@ -60,21 +60,26 @@ jobs:
           echo listing devices
           xcrun simctl list devicetypes
           
-      - name: Create iOS Simulator
-        id: simulator_device
-        run: |
-          xcrun simctl list runtimes
-          xcrun simctl list devicetypes
-          echo creating device
-          xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
-          echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
-          xcrun simctl list devices
+#      - name: Create iOS Simulator
+#        id: simulator_device
+#        run: |
+#          xcrun simctl list runtimes
+#          xcrun simctl list devicetypes
+#          echo creating device
+#          xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2
+#          echo "::set-output name=iphone_id::$(xcrun simctl create "iPhone 12 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro com.apple.CoreSimulator.SimRuntime.iOS-15-2)"
+#          xcrun simctl list devices
 
       - name: Test
         run: |
-          xcodebuild \
-          -allowProvisioningUpdates \
-          -scheme UIKIT-TMDBTests \
-          -sdk iphonesimulator15.2 \
-          -destination "platform=iOS Simulator,id=${{ steps.simulator_device.outputs.iphone_id }}" \
-          test \
+          set -o pipefail
+          xcodebuild test \
+          -scheme UIKIT-TMDB \
+          -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
+
+#          xcodebuild \
+#          -allowProvisioningUpdates \
+#          -scheme 'UIKIT-TMDBTests' \
+#          -sdk iphonesimulator15.2 \
+#          -destination "platform=iOS Simulator,id=${{ steps.simulator_device.outputs.iphone_id }}" \
+#          test \
