@@ -64,7 +64,6 @@ jobs:
         run: |
           xcodebuild \
           -allowProvisioningUpdates \
-          -project UIKIT-TMDB.xcodeproj \
           -scheme UIKIT-TMDBTests \
           -sdk iphonesimulator \
           -destination "platform=iOS Simulator,name=iPhone 12,OS=15.2" \
